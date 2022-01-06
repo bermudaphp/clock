@@ -141,7 +141,7 @@ final class Clock
                 return $creator::create(...array_merge($time, $timeZone))->locale(self::$locale);
             }
 
-            elseif ($count <= 0 || $count > 6) {
+            elseif (0 >= $count || $count > 6) {
                 throw new \InvalidArgumentException('Invalid time format. Argument [time] must be an array of integers up to 6 elements long.');
             }
 
