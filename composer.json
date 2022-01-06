@@ -1,0 +1,13 @@
+{
+    "name": "bermudaphp/clock",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Bermuda\\Clock\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.0.0",
+        "nesbot/carbon": "^2.55.2"
+    }
+}
