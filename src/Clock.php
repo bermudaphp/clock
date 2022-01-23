@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Bermuda\Clock;
 
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
@@ -138,13 +138,9 @@ final class Clock
         if (is_array($time)) {
             if (($count = count($time)) > 3) {
                 return $creator::create(...array_merge($time, $timeZone))->locale(self::$locale);
-            }
-
-            elseif ($count <= 0 || $count > 6) {
+            } elseif (0 >= $count || $count > 6) {
                 throw new \InvalidArgumentException('Invalid time format. Argument [time] must be an array of integers up to 6 elements long.');
-            }
-
-            else {
+            } else {
                 return $creator::createFromTime(...array_merge($time, $timeZone))->locale(self::$locale);
             }
         }
