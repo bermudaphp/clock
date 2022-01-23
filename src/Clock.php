@@ -1,6 +1,6 @@
 <?php
 
-namespace Bermuda\Clock;
+namespace App;
 
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
@@ -114,7 +114,6 @@ final class Clock
         }
 
         if ($time instanceof \DateTimeInterface) {
-
             if ($time instanceof \DateTimeImmutable) {
                 return $creator::createFromImmutable($time)->locale(self::$locale);
             }
@@ -141,7 +140,7 @@ final class Clock
                 return $creator::create(...array_merge($time, $timeZone))->locale(self::$locale);
             }
 
-            elseif (0 >= $count || $count > 6) {
+            elseif ($count <= 0 || $count > 6) {
                 throw new \InvalidArgumentException('Invalid time format. Argument [time] must be an array of integers up to 6 elements long.');
             }
 
@@ -173,20 +172,18 @@ final class Clock
     }
 
     /**
-     * @param string $format
-     * @param string $time
-     * @param string|\DateTimeZone|null $timeZone
+     * @param \DateTimeInterface $time
      * @param bool $immutable
      * @return CarbonInterface
      */
-    public static function fromObject(\DateTimeInterface $time, string|\DateTimeZone $timeZone = null, bool $immutable = true): CarbonInterface
+    public static function fromObject(\DateTimeInterface $time, bool $immutable = true): CarbonInterface
     {
         $creator = self::creator($immutable);
         return $time instanceof \DateTimeImmutable
-            ? $creator::createFromImmutable($time, $timeZone ?? new \DateTimeZone(self::$timeZone))->locale(self::$locale)
-            : $creator::createFromInterface($time, $timeZone ?? new \DateTimeZone(self::$timeZone))->locale(self::$locale);
+            ? $creator::createFromImmutable($time)->locale(self::$locale)
+            : $creator::createFromInterface($time)->locale(self::$locale);
     }
-
+    
     /**
      * @param string $format
      * @param string $time
