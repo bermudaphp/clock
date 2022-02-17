@@ -132,7 +132,7 @@ final class Clock
                 return $creator::now($timeZone)->locale(self::$locale);
             }
 
-            return $creator::createFromTimeString($time, $timeZone)->locale(self::$locale);
+            return $creator::parse($time, $timeZone)->locale(self::$locale);
         }
 
         if (is_array($time)) {
