@@ -110,7 +110,7 @@ final class Clock
         $creator = $immutable ? self::$immutableCreator : self::$creator;
 
         if ($timeZone === null) {
-            $timeZone = new \DateTimeZone(self::$timeZone);
+            $timeZone = new \DateTimeZone(self::$timeZone ?? date_default_timezone_get());
         }
 
         if ($time instanceof \DateTimeInterface) {
