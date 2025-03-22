@@ -18,7 +18,7 @@ final class Clock
      * @param string|null $creator
      * @param string|null $immutableCreator
      */
-    public static function setCreators(string $creator = null, string $immutableCreator = null): void
+    public static function setCreators(?string $creator = null, ?string $immutableCreator = null): void
     {
         if ($creator !== null) {
             if (!is_subclass_of($creator, CarbonInterface::class)) {
@@ -38,21 +38,10 @@ final class Clock
     }
 
     /**
-     * @param string|int|float|array|\DateTimeInterface $time
-     * @param string $format
-     * @param \DateTimeZone|null $timeZone
-     * @return string
-     */
-    public static function toFormat(string|int|float|array|\DateTimeInterface $time = 'now', string $format = 'Y-d-m', \DateTimeZone $timeZone = null): string
-    {
-        return static::create($time, $timeZone)->format($format);
-    }
-
-    /**
      * @param string|null $locale
      * @return string
      */
-    public static function locale(string $locale = null): string
+    public static function locale(?string $locale = null): string
     {
         if ($locale !== null) {
             $old = self::$locale;
@@ -113,7 +102,7 @@ final class Clock
      * @param string|null $format
      * @return CarbonInterface
      */
-    public static function create(string|int|float|array|\DateTimeInterface $time = 'now', \DateTimeZone $timeZone = null, bool $immutable = true, string $format = null): CarbonInterface
+    public static function create(string|int|float|array|\DateTimeInterface $time = 'now', ?\DateTimeZone $timeZone = null, bool $immutable = true, ?string $format = null): CarbonInterface
     {
         /**
          * @var CarbonInterface $creator
@@ -121,7 +110,7 @@ final class Clock
         $creator = $immutable ? self::$immutableCreator : self::$creator;
 
         if ($timeZone === null) {
-            $timeZone = new \DateTimeZone(self::timeZone());
+            $timeZone = new \DateTimeZone(self::$timeZone);
         }
 
         if ($time instanceof \DateTimeInterface) {
@@ -164,9 +153,9 @@ final class Clock
      * @param bool $immutable
      * @return CarbonInterface
      */
-    public static function now(string|\DateTimeZone $timeZone = null, bool $immutable = true): CarbonInterface
+    public static function now(null|string|\DateTimeZone $timeZone = null, bool $immutable = true): CarbonInterface
     {
-        return self::creator($immutable)::now($timeZone ?? new \DateTimeZone(self::timeZone()))->locale(self::$locale);
+        return self::creator($immutable)::now($timeZone ?? new \DateTimeZone(self::$timeZone))->locale(self::$locale);
     }
 
     /**
@@ -198,9 +187,9 @@ final class Clock
      * @param bool $immutable
      * @return CarbonInterface
      */
-    public static function fromFormat(string $format, string $time, string|\DateTimeZone $timeZone = null, bool $immutable = true): CarbonInterface
+    public static function fromFormat(string $format, string $time, null|string|\DateTimeZone $timeZone = null, bool $immutable = true): CarbonInterface
     {
-        return self::creator($immutable)::createFromFormat($format, $time, $timeZone ?? new \DateTimeZone(self::timeZone()))->locale(self::$locale);
+        return self::creator($immutable)::createFromFormat($format, $time, $timeZone ?? new \DateTimeZone(self::$timeZone))->locale(self::$locale);
     }
 
     /**
@@ -209,9 +198,9 @@ final class Clock
      * @param bool $immutable
      * @return CarbonInterface
      */
-    public static function fromTimestamp(string|int|float $timestamp, string|\DateTimeZone $timeZone = null, bool $immutable = true): CarbonInterface
+    public static function fromTimestamp(string|int|float $timestamp, null|string|\DateTimeZone $timeZone = null, bool $immutable = true): CarbonInterface
     {
-        return self::creator($immutable)::createFromTimestamp($timestamp, $timeZone ?? new \DateTimeZone(self::timeZone()))->locale(self::$locale);
+        return self::creator($immutable)::createFromTimestamp($timestamp, $timeZone ?? new \DateTimeZone(self::$timeZone))->locale(self::$locale);
     }
 
     /**
@@ -220,9 +209,9 @@ final class Clock
      * @param bool $immutable
      * @return CarbonInterface
      */
-    public static function fromTimestampMs(string|int|float $timestamp, string|\DateTimeZone $timeZone = null, bool $immutable = true): CarbonInterface
+    public static function fromTimestampMs(string|int|float $timestamp, null|string|\DateTimeZone $timeZone = null, bool $immutable = true): CarbonInterface
     {
-        return self::creator($immutable)::createFromTimestampMs($timestamp, $timeZone ?? new \DateTimeZone(self::timeZone()))->locale(self::$locale);
+        return self::creator($immutable)::createFromTimestampMs($timestamp, $timeZone ?? new \DateTimeZone(self::$timeZone))->locale(self::$locale);
     }
 
     /**
@@ -256,9 +245,9 @@ final class Clock
      * @param bool $immutable
      * @return CarbonInterface
      */
-    public static function fromDateTime(?int $year = 0, ?int $month = 1, ?int $day = 1, ?int $hour = 0, ?int $minute = 0, ?int $second = 0, string|\DateTimeZone $timeZone = null, bool $immutable = true): CarbonInterface
+    public static function fromDateTime(?int $year = 0, ?int $month = 1, ?int $day = 1, ?int $hour = 0, ?int $minute = 0, ?int $second = 0, null|string|\DateTimeZone $timeZone = null, bool $immutable = true): CarbonInterface
     {
-        return self::creator($immutable)::create($year, $month, $day, $hour, $minute, $second, $timeZone ?? new \DateTimeZone(self::timeZone()))->locale(self::$locale);
+        return self::creator($immutable)::create($year, $month, $day, $hour, $minute, $second, $timeZone ?? new \DateTimeZone(self::$timeZone))->locale(self::$locale);
     }
 
     /**
@@ -269,7 +258,7 @@ final class Clock
      * @param bool $immutable
      * @return CarbonInterface
      */
-    public static function fromIsoFormat(string $format, string $time, \DateTimeZone|string $tz = null, ?string $locale = 'en', TranslatorInterface $translator = null, bool $immutable = true): CarbonInterface
+    public static function fromIsoFormat(string $format, string $time, ?string $locale = 'en', ?TranslatorInterface $translator = null, bool $immutable = true): CarbonInterface
     {
         return self::creator($immutable)::createFromIsoFormat($format, $time, $tz, $locale, $translator)->locale(self::$locale);
     }
@@ -282,16 +271,16 @@ final class Clock
      * @param bool $immutable
      * @return CarbonInterface
      */
-    public static function fromTime(?int $hour = 0, ?int $minute = 0, ?int $second = 0, string|\DateTimeZone $timeZone = null, bool $immutable = true): CarbonInterface
+    public static function fromTime(?int $hour = 0, ?int $minute = 0, ?int $second = 0, null|string|\DateTimeZone $timeZone = null, bool $immutable = true): CarbonInterface
     {
-        return self::creator($immutable)::createFromTime($hour, $minute, $second, $timeZone ?? new \DateTimeZone(self::timeZone()))->locale(self::$locale);
+        return self::creator($immutable)::createFromTime($hour, $minute, $second, $timeZone ?? new \DateTimeZone(self::$timeZone))->locale(self::$locale);
     }
 
     /**
      * @param string|\DateTimeZone|null $timeZone
      * @return string
      */
-    public static function timeZone(string|\DateTimeZone $timeZone = null): string
+    public static function timeZone(null|string|\DateTimeZone $timeZone = null): string
     {
         if ($timeZone !== null) {
             $currentTimeZone = date_default_timezone_get();
